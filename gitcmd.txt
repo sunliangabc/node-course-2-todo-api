@@ -1,0 +1,7 @@
+git init
+git status
+git add .
+git commit -m "init commit"
+
+git remote add origin https://github.com/sunliangabc/node-course-2-todo-api.git
+git push -u origin master
