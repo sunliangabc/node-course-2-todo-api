@@ -4,7 +4,7 @@ var {mongoose} = require('./db/mongoose');
 
 var {Todo} = require('./models/todo.js');
 var {User} = require('./models/user.js');
-
+const {ObjectID} = require('mongodb');
 var app = express();
 app.use(bodyParser.json());
 app.post('/todos', (req, res) => {
@@ -26,6 +26,25 @@ app.get('/todos', (req, res) => {
     res.status(400).send(err);
   });
 });
+app.get('/todos/:id', (req,res) => {
+  // res.send(req.params);
+  var id = req.params.id;
+  if(ObjectID.isValid(id)){
+    Todo.findById(id).then((todo) => {
+      if(todo){
+        res.send({todo});
+      }else{
+          res.status(404).send({});
+      }
+    }, (err) => {
+        res.status(404).send(err);
+    }). catch((e) => {
+        res.status(404).send(e);
+    });
+  }else{
+    return res.status(404).send({});
+  }
+})
 app.listen(3000, () => {
   console.log('Started on port 3000');
 });

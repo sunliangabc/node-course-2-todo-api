@@ -5,7 +5,7 @@ const {User} = require('./../server/models/user.js');
 
 var uid = '5b186552e2ce7d01f0baf366';
 if(ObjectID.isValid(uid)){
-  User.find
+  // User.find
 }
 var id = '5b1c1697e8b8ebf358109c18';
 if(ObjectID.isValid(id)){
