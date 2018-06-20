@@ -11,8 +11,28 @@ var app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-
-//SAVE
+/**===============USER================**/
+//SAVE User
+app.post('/user', (req, res) => {
+  var user = new User(_.pick(req.body, ['email', 'password']));
+  console.log(user);
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }, (error) => {
+    res.status(400).send(error);
+    console.log('then error', error);
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((err) => {
+    console.log('catch error', err);
+  });
+});
+//QUERY users
+//QUERY user
+//DELETE user
+//UPDATE user
+/**===============TODO================**/
+//SAVE todo
 app.post('/todos', (req, res) => {
   var todo = new Todo({
     text: req.body.text
@@ -24,7 +44,7 @@ app.post('/todos', (req, res) => {
   });
 // console.log(req.body);
 });
-//QUERY
+//QUERY todo
 app.get('/todos', (req, res) => {
   Todo.find().then((todos) => {
     res.send({todos});
@@ -32,7 +52,7 @@ app.get('/todos', (req, res) => {
     res.status(400).send(err);
   });
 });
-//QUERY ONE
+//QUERY ONE todo
 app.get('/todos/:id', (req,res) => {
   // res.send(req.params);
   var id = req.params.id;
@@ -52,7 +72,7 @@ app.get('/todos/:id', (req,res) => {
     return res.status(404).send({});
   }
 });
-//DELETE
+//DELETE one todo
 app.delete('/todos/:id', (req, res) => {
   var id = req.params.id;
   if(!ObjectID.isValid(id)){
@@ -70,6 +90,7 @@ app.delete('/todos/:id', (req, res) => {
     });
   }
 });
+//UPDATE todo
 app.patch('/todos/:id', (req, res) => {
   var id = req.params.id;
   var body = _.pick(req.body, ['text', 'completed']);
